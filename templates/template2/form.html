@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Template 2 - Resume Input</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='template2/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p0fH+Q5cP0ro8kBJd8iTJQ+3ZkXbXOoPjNbdjlODxGbk3RkPCtT2v7XxOaZunZf0+Uvl5U/ugSl3fFjZdTytjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            font-size: 16px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        form input,
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        form button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #357ab8;
+        }
+
+        .skills-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 8px;
+            min-height: 50px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #expertise-list, #language-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .skill-chip {
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-chip span {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: red;
+        }
+
+        .suggestion-box {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc;
+            position: absolute;
+            background-color: white;
+            width: 100%;
+            z-index: 10;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion-box li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .suggestion-box li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" action="/preview/template2" enctype="multipart/form-data">
+        <h2>Template 2 - Enter Your Details</h2>
+
+        <label>Name:</label>
+        <input type="text" name="name">
+
+        <label>Title:</label>
+        <input type="text" name="title">
+
+        <label for="photo">Upload Profile Photo:</label>
+        <input type="file" name="photo" accept="image/*">
+
+        <label><i class="fa-solid fa-phone"></i> Phone:</label>
+<input type="text" name="phone">
+
+<label><i class="fa-solid fa-envelope"></i> Email:</label>
+<input type="email" name="email">
+
+<label><i class="fa-solid fa-globe"></i> Website:</label>
+<input type="text" name="website">
+
+<label><i class="fa-solid fa-location-dot"></i> Address:</label>
+<input type="text" name="address">
+
+
+        <label>About Me:</label>
+        <textarea name="about" rows="3"></textarea>
+
+        <h3>Education</h3>
+<div id="education-container" class="skills-container">
+    <div id="education-list"></div>
+    <button type="button" onclick="addEducation()">+ Add Education</button>
+    <input type="hidden" name="education" id="education-hidden">
+</div>
+
+
+        <label>Expertise:</label>
+        <div class="skills-container">
+            <div id="expertise-list"></div>
+            <input type="text" id="expertise-input" placeholder="Start typing a skill...">
+            <ul id="expertise-suggestions" class="suggestion-box"></ul>
+            <input type="hidden" name="expertise" id="expertise-hidden">
+        </div>
+
+       <label>Languages:</label>
+<div class="skills-container">
+    <div id="language-list"></div>
+    <input type="text" id="language-input" placeholder="Start typing a language...">
+    <ul id="language-suggestions" class="suggestion-box"></ul>
+    <input type="hidden" name="languages" id="language-hidden">
+</div>
+
+
+        <h3>Work Experience</h3>
+
+<div id="work-experience-container">
+  <div class="work-experience" data-index="1">
+    <h4>Work Experience 1</h4>
+    <label>Duration:</label>
+    <input type="text" name="job1_duration">
+    <label>Company:</label>
+    <input type="text" name="job1_company">
+    <label>Position:</label>
+    <input type="text" name="job1_position">
+    <label>Description:</label>
+    <textarea name="job1_desc"></textarea>
+  </div>
+</div>
+
+<button type="button" id="add-work-exp-btn">+ Add Work Experience</button>
+
+
+        <h3>Internships</h3>
+        <label>Internship Details:</label><textarea name="internships"></textarea>
+
+        <button type="submit">Generate Resume</button>
+    </form>
+
+    <script>
+        const skillData = [
+    // Programming & Development
+    "Python", "Java", "C", "C++", "C#", "JavaScript", "TypeScript",
+    "HTML", "CSS", "PHP", "Kotlin", "Swift", "Dart", "Go", "Rust",
+
+    // Web & App Development
+    "React.js", "Angular", "Vue.js", "Node.js", "Express.js", "Django",
+    "Flask", "Laravel", "Spring Boot", "ASP.NET", "Bootstrap", "Tailwind CSS",
+    "WordPress", "Firebase", "Flutter", "React Native",
+
+    // Data Science & ML
+    "Data Analysis", "Machine Learning", "Deep Learning", "Artificial Intelligence",
+    "Natural Language Processing (NLP)", "Computer Vision", "TensorFlow", "Keras",
+    "PyTorch", "Scikit-learn", "Pandas", "NumPy", "Matplotlib", "R Programming", "MATLAB",
+
+    // Cloud & DevOps
+    "Microsoft Azure", "Amazon Web Services (AWS)", "Google Cloud Platform (GCP)",
+    "Docker", "Kubernetes", "Jenkins", "Git", "GitHub", "GitLab",
+    "CI/CD Pipelines", "Bash/Shell Scripting",
+
+    // Databases & Big Data
+    "MySQL", "PostgreSQL", "MongoDB", "SQLite", "Redis", "Oracle DB",
+    "Firebase Firestore", "Apache Hadoop", "Apache Spark", "BigQuery",
+
+    // BI & Tools
+    "Microsoft Excel", "Power BI", "Tableau", "Google Data Studio",
+    "SPSS", "Zoho Analytics", "Google Analytics",
+
+    // Design & Multimedia
+    "Adobe Photoshop", "Adobe Illustrator", "Adobe XD", "Figma", "Canva",
+    "InDesign", "Blender", "Unity", "Unreal Engine", "AutoCAD", "Sketch",
+
+    // Marketing & Content
+    "Digital Marketing", "SEO", "SEM", "Social Media Marketing",
+    "Email Marketing", "Content Writing", "Copywriting", "Blogging",
+    "Google Ads", "Facebook Ads", "Influencer Marketing", "Branding", "Market Research",
+
+    // Finance & Management
+    "Tally", "QuickBooks", "Financial Modeling", "Business Analysis",
+    "HR Management", "Project Management", "Microsoft Office Suite",
+    "CRM (Zoho, Salesforce)", "Business Communication",
+
+    // Soft Skills
+    "Communication", "Leadership", "Teamwork", "Public Speaking",
+    "Time Management", "Problem Solving", "Critical Thinking",
+    "Creativity", "Adaptability", "Attention to Detail", "Conflict Resolution"
+];
+const languageData = [
+    "English (Basic)", "English (Intermediate)", "English (Advanced)",
+    "Hindi (Basic)", "Hindi (Intermediate)", "Hindi (Advanced)",
+    "Spanish (Basic)", "Spanish (Intermediate)", "Spanish (Advanced)",
+    "French (Basic)", "French (Intermediate)", "French (Advanced)",
+    "German (Basic)", "German (Intermediate)", "German (Advanced)",
+    "Chinese (Basic)", "Chinese (Intermediate)", "Chinese (Advanced)",
+    "Japanese (Basic)", "Japanese (Intermediate)", "Japanese (Advanced)"
+];
+
+
+  
+
+        function setupAutoSuggest(inputId, suggestionId, listId, hiddenId, dataSet) {
+            const input = document.getElementById(inputId);
+            const suggestions = document.getElementById(suggestionId);
+            const list = document.getElementById(listId);
+            const hidden = document.getElementById(hiddenId);
+
+            let selected = [];
+
+            input.addEventListener('input', () => {
+                const val = input.value.toLowerCase();
+                suggestions.innerHTML = '';
+                if (val) {
+                    const matches = dataSet.filter(item =>
+                        item.toLowerCase().startsWith(val) && !selected.includes(item)
+                    );
+                    matches.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        li.onclick = () => addItem(item);
+                        suggestions.appendChild(li);
+                    });
+                    suggestions.style.display = 'block';
+                } else {
+                    suggestions.style.display = 'none';
+                }
+            });
+
+            function addItem(item) {
+                if (!selected.includes(item)) {
+                    selected.push(item);
+
+                    const chip = document.createElement('div');
+                    chip.className = 'skill-chip';
+                    chip.textContent = item;
+
+                    const close = document.createElement('span');
+                    close.textContent = '×';
+                    close.onclick = () => removeItem(item, chip);
+                    chip.appendChild(close);
+
+                    list.appendChild(chip);
+                    updateHidden();
+                }
+
+                input.value = '';
+                suggestions.innerHTML = '';
+                suggestions.style.display = 'none';
+            }
+
+            function removeItem(item, chip) {
+                selected = selected.filter(i => i !== item);
+                chip.remove();
+                updateHidden();
+            }
+
+            function updateHidden() {
+                hidden.value = selected.join(',');
+            }
+        }
+
+        setupAutoSuggest('expertise-input', 'expertise-suggestions', 'expertise-list', 'expertise-hidden', skillData);
+       setupAutoSuggest('language-input', 'language-suggestions', 'language-list', 'language-hidden', languageData);
+
+
+       let educationEntries = [];
+
+function addEducation(value = '') {
+    const container = document.getElementById('education-list');
+
+    const div = document.createElement('div');
+    div.className = 'skill-chip';
+    div.style.width = "100%";
+    div.style.display = "flex";
+    div.style.justifyContent = "space-between";
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = value;
+    input.placeholder = "Enter education (e.g., B.Sc. Computer Science, 2020)";
+    input.style.flex = "1";
+    input.style.marginRight = "10px";
+
+    input.oninput = updateEducationHidden;
+
+    const removeBtn = document.createElement('span');
+    removeBtn.textContent = '×';
+    removeBtn.style.cursor = 'pointer';
+    removeBtn.style.color = 'red';
+    removeBtn.onclick = () => {
+        div.remove();
+        updateEducationHidden();
+    };
+
+    div.appendChild(input);
+    div.appendChild(removeBtn);
+    container.appendChild(div);
+
+    updateEducationHidden();
+}
+
+function updateEducationHidden() {
+    const inputs = document.querySelectorAll('#education-list input');
+    const values = Array.from(inputs).map(input => input.value.trim()).filter(Boolean);
+    document.getElementById('education-hidden').value = values.join('||');
+}
+
+let currentExp = 1;
+const maxExp = 3;
+
+document.getElementById('add-work-exp-btn').addEventListener('click', function() {
+  if (currentExp >= maxExp) return;
+
+  currentExp++;
+  const container = document.getElementById('work-experience-container');
+
+  const newExp = document.createElement('div');
+  newExp.classList.add('work-experience');
+  newExp.setAttribute('data-index', currentExp);
+  newExp.innerHTML = `
+    <h4>Work Experience ${currentExp}</h4>
+    <label>Duration:</label>
+    <input type="text" name="job${currentExp}_duration">
+    <label>Company:</label>
+    <input type="text" name="job${currentExp}_company">
+    <label>Position:</label>
+    <input type="text" name="job${currentExp}_position">
+    <label>Description:</label>
+    <textarea name="job${currentExp}_desc"></textarea>
+  `;
+  container.appendChild(newExp);
+
+  if (currentExp === maxExp) {
+    this.style.display = 'none'; // hide button after 3 experiences
+  }
+});
+
+    </script>
+</body>
+</html>

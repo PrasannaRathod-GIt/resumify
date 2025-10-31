@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Slideshow Home</title>
+  
+  <!-- Link to your CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<style>
+  .animated-header {
+    font-family: 'Poppins', sans-serif;
+  }
+</style>
+
+</head>
+<body>
+   <!-- Header -->
+  <svg viewBox="0 0 800 120" width="100%" height="120" style="display: block; margin: 60px auto;">
+  <defs>
+    <linearGradient id="gradAnimate" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#6a0dad">
+        <animate attributeName="stop-color" values="
+          #6a0dad;
+          #8e44ad;
+          #9b59b6;
+          #b084cc;
+          
+          #1e90ff;
+          #00bfff;
+          #4682b4;
+          #5dade2;
+          
+          #6a0dad" dur="6s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#add8e6">
+        <animate attributeName="stop-color" values="
+          #add8e6;
+          #5dade2;
+          #4682b4;
+          #00bfff;
+          #1e90ff;
+          #b084cc;
+          #9b59b6;
+          #8e44ad;
+          #6a0dad
+          " dur="6s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+  </defs>
+
+  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Poppins, Arial, sans-serif"
+        font-size="80"
+        stroke="white" stroke-width="1"
+        fill="url(#gradAnimate)">
+    Smart Resume.io
+  </text>
+</svg>
+<p class="tagline">Fill in your details. Get your resume in seconds ✨ .</p>
+
+
+ 
+         <!-- Sidebar -->
+  
+  
+  
+
+  
+
+  <!-- Main -->
+  <div class="main-content">
+    ...
+  </div>
+</body>
+
+
+  <!-- Slideshow -->
+   <div class="main-content">
+    <div class="slideshow-container">
+      <div class="slideshow-track">
+        <div class="template"><img src="{{ url_for('static', filename='images/template1.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template2.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template3.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template4.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template5.jpg') }}"></div>
+        
+
+        <!-- cloned for smooth looping -->
+        <div class="template"><img src="{{ url_for('static', filename='images/template1.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template2.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template3.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template4.jpg') }}"></div>
+        <div class="template"><img src="{{ url_for('static', filename='images/template5.jpg') }}"></div>
+        
+      </div>
+    </div>
+
+<!-- Get Started Button -->
+    <div class="button-wrapper">
+      <p class="description-line">Your dream job starts with the perfect resume.</p>
+  <p class="browse-resumes">Browse Resumes</p>
+      <a href="{{ url_for('select_template') }}">
+  <button class="get-started-btn">Get Started</button>
+</a>
+</div> <!-- end of .button-wrapper -->
+
+
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <!-- Link to your JavaScript -->
+   <!-- Why Choose Us Section -->
+<section class="why-choose-us">
+  <h2>Why Choose Smart Resume.io</h2>
+  <div class="features-container">
+    <div class="feature-box">
+      <h3>⚡ Fast Export</h3>
+      <p>Download your resume instantly in PDF or JPG format with one click.</p>
+    </div>
+    <div class="feature-box">
+      <h3>🎨 Different Templates</h3>
+      <p>Choose from beautifully designed resume templates that suit your profession.</p>
+    </div>
+    <div class="feature-box">
+      <h3>🧠 Smart Autofill</h3>
+      <p>Our system intelligently fills in your data to save you time and effort.</p>
+    </div>
+    
+  </div>
+</section>
+
+<!-- What Our Users Say Section -->
+<section class="user-reviews">
+  <h2>What Our Users Say</h2>
+  <div class="reviews-container">
+
+    <div class="review-card">
+      <div class="review-header">
+        <img src="{{ url_for('static', filename='images/user1.jpg') }}" alt="Priya Sharma" class="user-photo">
+        <div class="user-name">Priya Sharma</div>
+      </div>
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p class="review-text">"The templates are stunning and super easy to edit! My resume got noticed instantly."</p>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <img src="{{ url_for('static', filename='images/user2.jpg') }}" alt="Rahul Mehta" class="user-photo">
+        <div class="user-name">Rahul Mehta</div>
+      </div>
+      <div class="stars">⭐⭐⭐⭐</div>
+      <p class="review-text">"Loved the autofill feature — it made creating my resume quick and effortless!"</p>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <img src="{{ url_for('static', filename='images/user3.jpg') }}" alt="Neha Verma" class="user-photo">
+        <div class="user-name">Neha Verma</div>
+      </div>
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p class="review-text">"Professional and modern templates! Got my dream job thanks to this website."</p>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <img src="{{ url_for('static', filename='images/user4.jpg') }}" alt="Arjun Patel" class="user-photo">
+        <div class="user-name">Arjun Patel</div>
+      </div>
+      <div class="stars">⭐⭐⭐⭐</div>
+      <p class="review-text">"Quick download, sleek design, and super user-friendly — highly recommend!"</p>
+    </div>
+
+  </div>
+</section>
+
+
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  <!-- Footer Section -->
+<footer class="site-footer">
+  <div class="footer-container">
+    <p class="contact-info">📧 Contact us: support@smartresume.io</p>
+    <p class="rights">© 2025 Smart Resume.io. All rights reserved.</p>
+  </div>
+</footer>
+<div class="butterfly-container">
+  <img src="{{ url_for('static', filename='images/butterfly1.png') }}" class="butterfly">
+  <img src="{{ url_for('static', filename='images/butterfly2.png') }}" class="butterfly">
+  <img src="{{ url_for('static', filename='images/butterfly3.png') }}" class="butterfly">
+  <img src="{{ url_for('static', filename='images/butterfly4.png') }}" class="butterfly">
+  <img src="{{ url_for('static', filename='images/butterfly5.png') }}" class="butterfly">
+</div>
+<script>
+  const track = document.querySelector('.slideshow-track');
+  const templates = document.querySelectorAll('.template');
+
+  let scrollX = 0;
+  let speed = 1.75; // faster scroll
+  let isPaused = false;
+  let lastZoomed = null;
+  let zoomCooldown = false;
+
+  function animate() {
+    if (!isPaused) {
+      scrollX += speed;
+      track.style.transform = `translateX(-${scrollX}px)`;
+    }
+
+    const totalWidth = track.scrollWidth / 2;
+    if (scrollX >= totalWidth && !isPaused && !zoomCooldown) {
+      scrollX = 0;
+    }
+
+    checkCenterTemplate();
+    requestAnimationFrame(animate);
+  }
+
+  function checkCenterTemplate() {
+    const container = document.querySelector('.slideshow-container');
+    const containerCenter = window.innerWidth / 2;
+
+    templates.forEach(template => {
+      const rect = template.getBoundingClientRect();
+      const templateCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(templateCenter - containerCenter);
+
+      if (distance < 20 && !zoomCooldown) {
+        if (lastZoomed !== template) {
+          zoomCooldown = true;
+          isPaused = true;
+          lastZoomed = template;
+
+          template.classList.add('zoomed');
+          template.style.transform = 'scale(1.2)';
+
+          setTimeout(() => {
+            template.style.transform = 'scale(1)';
+            template.classList.remove('zoomed');
+
+            setTimeout(() => {
+              isPaused = false;
+              zoomCooldown = false;
+            }, 400);
+          }, 2000);
+        }
+      } else if (template !== lastZoomed) {
+        template.style.transform = 'scale(1)';
+      }
+    });
+  }
+
+  const buttonWrapper = document.querySelector('.button-wrapper');
+
+  function revealButtonOnScroll() {
+    const rect = buttonWrapper.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight;
+
+    if (isVisible) {
+      setTimeout(() => {
+        buttonWrapper.classList.add('visible');
+      }, 100);
+      window.removeEventListener('scroll', revealButtonOnScroll);
+    }
+  }
+
+  window.addEventListener('scroll', revealButtonOnScroll);
+  animate();
+</script>
+</body>
+</html>

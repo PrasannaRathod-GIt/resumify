@@ -1,0 +1,248 @@
+:root{
+  --accent: #5b7cff; /* softer gradient blue */
+  --muted: #7b7f87;
+  --container-w: 940px;
+}
+
+/* Reset */
+*{box-sizing:border-box}
+body{font-family:"Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f4f6f8; color:#222; margin:0; -webkit-font-smoothing:antialiased}
+
+/* Container */
+.resume-container{
+  max-width:var(--container-w);
+  margin:28px auto;
+  background:#fff;
+  border-radius:8px;
+  box-shadow:0 14px 36px rgba(20,30,40,.08);
+  overflow:hidden;
+}
+
+/* HEADER */
+.resume-header{
+  position:relative;
+  height:220px;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;            /* vertically center name-block */
+  justify-content:flex-end;     /* push name to right */
+  padding: 20px 80px 20px 40px; /* increased right padding */
+}
+.header-overlay{
+  position:absolute; inset:0; background:rgba(8,18,26,0.36);
+  pointer-events:none;
+}
+
+/* inner layout */
+.header-inner {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: flex-end; /* keeps alignment lower */
+  justify-content: flex-end; /* move name fully to right */
+  padding-right: 80px; /* adjust spacing from right */
+}
+
+
+/* profile pic absolute left, overlapping body */
+.profile-pic{
+  position:absolute;
+  left:36px;
+  bottom:-90px;        /* overlap amount - tune if needed */
+  width:155px;
+  height:155px;
+  border-radius:50%;
+  overflow:hidden;
+  border:1px solid #fff;
+  box-shadow:0 18px 34px rgba(10,20,30,0.14);
+  z-index:6;
+  background:#eee;
+  
+}
+.profile-pic img{width:100%; height:100%; object-fit:cover; display:block}
+
+/* name block at right */
+.name-block {
+  position: absolute;
+  top: -25px;            /* adjust up/down */
+  left: 270px;           /* fixed starting point – adjust to match photo spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  color: #fff;
+  z-index: 5;
+  max-width: 650px;      /* controls how far right text can grow */
+}
+
+.name-block h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  margin: 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  line-height: 1.1;
+  white-space: normal;   /* allow wrapping */
+  word-spacing: 6px;
+}
+
+.name-block h2 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.95);
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+
+
+/* BODY: two columns */
+.resume-body{display:flex; gap:34px; padding:92px 44px 48px; align-items:flex-start}
+.left-column{width:34%; padding-right:20px; border-right:1px solid #eee}
+.right-column{flex:1; padding-left:20px}
+
+/* Section headings */
+.section{margin-bottom:26px}
+.section h3{
+  font-size:18px;  /* increased from 12px */
+  font-weight:700; 
+  color:var(--muted); 
+  letter-spacing:4px;  /* slightly reduce if needed */
+  text-transform:uppercase; 
+  margin:0 0 12px;  /* spacing below */
+  display:inline-block;
+}
+
+.section h3::after{
+  content:""; 
+  display:block; 
+  width:60px;    /* or whatever width you want */
+  height:5px;    /* thicker line */
+  margin-top:10px;
+  border-radius:4px;
+  background: rgba(8, 58, 65, 0.74);  /* solid color */
+}
+
+
+
+/* Left column content */
+.left-column p, .left-column li{font-size:15px; color:#333; line-height:1.6}
+.contact-info{list-style:none; padding:0; margin:0}
+.contact-info li{margin-bottom:10px; font-size:14px}
+
+/* Skill list and experience */
+.skills-list, .exp-desc {margin:8px 0 0 20px; padding:0; font-size:14px; line-height:1.6}
+.skills-list li, .exp-desc li{margin-bottom:8px}
+
+/* Experience heading */
+.exp-item{margin-bottom:20px}
+.exp-heading{font-weight:700; font-size:15px; color:#151618}
+.exp-role{font-weight:500; color:#444; margin-left:8px}
+.exp-date{font-size:13px; color:var(--muted); margin:6px 0 10px}
+
+/* small muted text */
+.muted{color:#8a8f96}
+
+/* Responsive */
+@media (max-width:880px){
+  .resume-body{flex-direction:column; padding-top:80px}
+  .left-column{width:100%; border-right:none; padding-right:0; border-bottom:1px solid #eee; padding-bottom:18px}
+  .profile-pic{left:20px; bottom:-56px; width:120px; height:120px}
+  .name-block h1{font-size:36px}
+}
+/* Contact info list items */
+.contact-info li {
+  display: flex;          /* align icon + text */
+  align-items: flex-start; /* align icon to top of first line */
+  gap: 10px;              /* space between icon and text */
+  margin-bottom: 10px;    /* spacing between lines */
+  font-size: 14px;        /* consistent font size */
+  color: #333;            /* text color */
+}
+
+.contact-info li i {
+  width: 22px;            /* uniform icon width */
+  font-size: 20px;        /* icon size */
+  flex-shrink: 0;         /* prevent shrinking */
+  color: rgba(8, 58, 65, 0.74);  /* new icon color */
+}
+/* ✅ Top control bar (fully clickable) */
+#top-controls {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: auto; /* ✅ make it fully interactive */
+}
+
+/* Buttons */
+.control-btn {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.control-btn:hover {
+  background: rgba(0,0,0,0.05);
+  transform: translateY(-1px);
+}
+
+/* Dropdown group */
+#top-controls .download-group {
+  position: relative;
+  margin-left: auto;
+}
+
+/* Dropdown menu */
+.download-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  min-width: 160px;
+  z-index: 10000; /* ✅ keep on top */
+}
+
+/* Show when active */
+.download-menu.show {
+  display: block;
+}
+
+/* Menu options */
+.download-option {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.download-option:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* Body padding so controls don't overlap */
+body {
+  padding-top: 60px;
+}

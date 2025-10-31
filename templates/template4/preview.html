@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume Preview - Template 4</title>
+
+  <!-- Font + CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='template4/style.css') }}">
+</head>
+<body>
+  <!-- Top control bar (place BEFORE or AFTER your resume container in DOM, but visually overlayed) -->
+<div id="top-controls" aria-hidden="false">
+  <button id="back-btn" class="control-btn">← Back</button>
+
+  <div class="download-group">
+    <button id="download-btn" class="control-btn">Download ▾</button>
+    <div id="download-menu" class="download-menu" role="menu" aria-hidden="true">
+      <button class="download-option" data-type="pdf">Download as PDF</button>
+      <button class="download-option" data-type="jpg">Download as JPG</button>
+    </div>
+  </div>
+</div>
+  <div class="resume-preview" id="resume-content">
+
+    <!-- HEADER (maroon) -->
+    <header class="resume-header">
+      <div class="header-inner">
+        <div class="profile-wrap">
+          {% if profile_image %}
+            <!-- works whether you pass a full URL/path or a filename in /static/uploads -->
+            <img
+              src="{% if '/' in profile_image %}{{ profile_image }}{% else %}{{ url_for('static', filename='uploads/' ~ profile_image) }}{% endif %}"
+              alt="Profile Picture">
+          {% endif %}
+        </div>
+
+        <div class="heading">
+          <h1 class="name">{{ name }}</h1>
+          <h2 class="role">{{ title }}</h2>
+        </div>
+      </div>
+    </header>
+
+    <!-- BODY (two columns) -->
+    <main class="resume-body">
+      <!-- LEFT -->
+      <aside class="left-col">
+        <section class="section">
+  <h3 class="section-title">My Contact</h3>
+  {% if email %}<p><i data-lucide="mail" class="icon"></i>{{ email }}</p>{% endif %}
+  {% if phone %}<p><i data-lucide="phone" class="icon"></i>{{ phone }}</p>{% endif %}
+  {% if website %}<p><i data-lucide="globe" class="icon"></i>{{ website }}</p>{% endif %}
+  {% if location %}<p><i data-lucide="map-pin" class="icon"></i>{{ location }}</p>{% endif %}
+</section>
+
+
+        {% if hard_skills %}
+        <section class="section">
+          <h3 class="section-title">Hard Skill</h3>
+          <ul class="list">
+            {% for s in hard_skills %}
+              <li>{{ s }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        {% if soft_skills %}
+        <section class="section">
+          <h3 class="section-title">Soft Skill</h3>
+          <ul class="list">
+            {% for s in soft_skills %}
+              <li>{{ s }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        {% if education %}
+        <section class="section">
+          <h3 class="section-title">Education Background</h3>
+          <ul class="list">
+            {% for e in education %}
+              <li>{{ e }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+      </aside>
+
+      <!-- RIGHT -->
+      <section class="right-col">
+        {% if about %}
+        <section class="section">
+          <h3 class="section-title right">About Me</h3>
+          <p>{{ about }}</p>
+        </section>
+        {% endif %}
+
+        {% if experiences %}
+        <section class="section">
+          <h3 class="section-title right">Professional Experience</h3>
+          {% for exp in experiences %}
+            <div class="exp-block">
+              <div class="exp-head">
+                <strong>{{ exp.company }}</strong> | {{ exp.job_title }}
+              </div>
+              <div class="exp-dates">{{ exp.start_date }} – {{ exp.end_date }}</div>
+
+              {% if exp.responsibilities %}
+              <ul class="list">
+                {% for r in exp.responsibilities %}
+                  <li>{{ r }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if achievements %}
+        <section class="section">
+          <h3 class="section-title right">Achievements</h3>
+          <ul class="achievements">
+            {% for a in achievements %}
+              <li>
+                <strong>
+                  {% if a.date is defined %}{{ a.date }}{% else %}{{ a.get('date') }}{% endif %}
+                </strong>
+                — 
+                {% if a.desc is defined %}{{ a.desc }}{% else %}{{ a.get('desc') }}{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+      </section>
+    </main>
+  </div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+<!-- Download & Back Button Scripts -->
+
+<!-- Download & Back Button Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(() => {
+  const resumeNode = document.getElementById('resume-content');
+  const backBtn = document.getElementById('back-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const downloadMenu = document.getElementById('download-menu');
+
+  // 🔙 Back Button
+  if (backBtn) backBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('template4_form') }}";
+  });
+
+  // 📂 Toggle dropdown
+  downloadBtn.addEventListener('click', () => {
+    downloadMenu.classList.toggle('show');
+  });
+  document.addEventListener('click', e => {
+    if (!downloadBtn.contains(e.target) && !downloadMenu.contains(e.target)) {
+      downloadMenu.classList.remove('show');
+    }
+  });
+
+  // 🖼 Wait for all images before capture
+  function waitForImages(node) {
+    const imgs = node.querySelectorAll("img");
+    return Promise.all(
+      [...imgs].map(
+        img => new Promise(res => {
+          if (img.complete) res();
+          else { img.onload = img.onerror = res; }
+        })
+      )
+    );
+  }
+
+  // 📸 Download as JPG
+  async function downloadAsJpg() {
+    try {
+      await waitForImages(resumeNode);
+      const canvas = await html2canvas(resumeNode, {
+        scale: 3,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: resumeNode.scrollWidth,
+        windowHeight: resumeNode.scrollHeight
+      });
+      const link = document.createElement('a');
+      link.download = 'resume.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 1.0);
+      link.click();
+    } catch (err) {
+      console.error("JPG download failed:", err);
+      alert("Failed to export JPG — check console for details.");
+    }
+  }
+
+  // 📄 Download as PDF (no cropping, full width visible)
+  async function downloadAsPdf() {
+    try {
+      console.log("Preparing precise PDF export...");
+      await waitForImages(resumeNode);
+
+      const canvas = await html2canvas(resumeNode, {
+        scale: 3,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        backgroundColor: '#ffffff',
+        windowWidth: resumeNode.scrollWidth,
+        windowHeight: resumeNode.scrollHeight
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // ✅ Fit to full width, maintaining aspect ratio (no cropping)
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let yPosition = 0;
+      if (imgHeight < pageHeight) {
+        yPosition = (pageHeight - imgHeight) / 2;
+      }
+
+      pdf.addImage(imgData, 'PNG', 0, yPosition, imgWidth, imgHeight);
+      pdf.save('resume.pdf');
+      console.log("PDF download triggered successfully.");
+    } catch (err) {
+      console.error("PDF export failed:", err);
+      alert("Failed to export PDF — check console for details.");
+    }
+  }
+
+  // ⚡ Handle dropdown options
+  document.querySelectorAll('.download-option').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const type = e.target.dataset.type;
+      downloadMenu.classList.remove('show');
+      if (type === 'pdf') downloadAsPdf();
+      else if (type === 'jpg') downloadAsJpg();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

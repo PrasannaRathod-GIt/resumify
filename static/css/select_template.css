@@ -1,0 +1,299 @@
+/* Body: Make full page scrollable */
+
+
+/* Body: Make full page scrollable */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-image: url('../images/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  min-height: 100vh;
+  overflow-y: auto;         /* ✅ Allow vertical scrolling */
+  overflow-x: hidden;       /* ✅ Prevent horizontal scroll */
+}
+
+
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 30px 20px;
+  color: white;
+  height: 100vh;
+  box-sizing: border-box;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+/* Main content scrolls */
+.template-area {
+  margin-left: 220px;
+  padding: 40px;
+  box-sizing: border-box;
+  width: calc(100% - 220px);
+}
+
+/* Resume Grid Area */
+
+
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* ✅ 3 templates per row */
+  gap: 20px;
+  padding: 10px;
+  justify-items: center; /* ✅ Center each box in its grid cell */
+}
+
+
+
+/* Resume Box */
+.template-box {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  width: 100%; /* ✅ Let it fill its grid cell */
+  max-width: 250px; /* Optional: Limit size */
+}
+
+
+.template-box:hover {
+  transform: scale(1.08);
+}
+
+.template-box img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.select-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.select-btn:hover {
+  background-color: #218838;
+}
+
+/* Scroll Message at the bottom */
+.scroll-message {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  font-family: 'Merriweather', serif;
+  margin-top: 60px;
+  margin-bottom: 40px;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+/* ---------- FINAL POPUP DESIGN ---------- */
+
+/* ---------- POPUP (MEDIUM SIZE, 50-50 SPLIT) ---------- */
+
+.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup.open {
+  display: flex;
+  animation: fadeIn 0.25s ease;
+}
+
+/* --- Popup Box --- */
+.popup-content {
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 70%;                /* ✅ medium size */
+  max-width: 850px;
+  min-height: 480px;         /* ✅ comfortable height */
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+
+/* --- LEFT (Template Image) --- */
+.popup-left {
+  flex: 0 0 50%;             /* ✅ Equal split */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f9f9f9;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.popup-left img {
+  width: 100%;
+  height: auto;
+  max-height: 440px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* --- RIGHT (Fields Section) --- */
+.popup-right {
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 25px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.popup-right h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid #28a745;
+  padding-bottom: 6px;
+}
+
+#popup-fields {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 70px 0; /* Leave room for button */
+  overflow-y: auto;
+  max-height: 330px;
+}
+
+#popup-fields li {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 3px solid #28a745;
+}
+
+/* --- Select Button --- */
+.final-select-btn {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  right: 25px;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.final-select-btn:hover {
+  background-color: #218838;
+}
+
+/* --- Responsive View --- */
+@media (max-width: 800px) {
+  .popup-content {
+    flex-direction: column;
+    width: 90%;
+    max-width: 600px;
+  }
+
+  .popup-left, .popup-right {
+    flex: 1 1 auto;
+    width: 100%;
+    border: none;
+  }
+
+  .popup-left img {
+    height: auto;
+    object-fit: contain;
+  }
+
+  .final-select-btn {
+    position: static;
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* 🌟 Wider Resume Boxes Section (2 per row, centered nicely) */
+.wide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ✅ 2 templates per row */
+  gap: 50px; /* ✅ comfortable spacing between them */
+  justify-content: center; /* ✅ center the whole grid */
+  align-items: start;
+  margin-top: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ✅ Make each resume box wider and balanced */
+.wide-box {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 460px; /* ✅ perfect size for 2 per row */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.wide-box:hover {
+  transform: scale(1.05);
+}
+
+/* ✅ Resume preview image styling */
+.wide-box img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+ border: 1px solid #bbb; /* ↓ thinner border */
+}
+
+/* ✅ Green select button under each resume */
+.wide-box .select-btn {
+  margin-top: 12px;
+  padding: 10px 18px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.wide-box .select-btn:hover {
+  background-color: #218838;
+}

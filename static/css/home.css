@@ -1,0 +1,430 @@
+/* Base styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+
+  /* ✅ Allow vertical stacking of page elements */
+  display: flex;
+  flex-direction: column;
+
+  /* ✅ Ensure content flows top to bottom and expands fully */
+  min-height: 100vh;
+
+  /* ✅ Scroll setup */
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* ✅ Background image fix */
+  background-image: url('../images/bg.jpg');
+  background-size: cover;            /* ✅ Stretch image to fill screen */
+  background-repeat: no-repeat;      /* ✅ Avoid repeat */
+  background-position: center center;/* ✅ Center both ways */
+}
+
+
+/* Centered main content after removing sidebar */
+.main-content {
+  padding: 40px 30px;
+  box-sizing: border-box;
+  max-width: 1000px;
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+
+/* Slideshow Styles */
+.slideshow-container {
+  width: 800px;
+  height: 380px;
+  overflow: visible; /* Ensure zoomed items are not clipped */
+  position: relative;
+  margin: 0 auto;
+  margin-top: -20px;
+}
+
+.slideshow-track {
+  display: flex;
+  gap: 30px;
+  will-change: transform;
+  position: relative;
+}
+
+.template {
+  flex: 0 0 260px;
+  transition: transform 0.4s ease-in-out;
+  position: relative;
+  z-index: 1;
+}
+
+.template img {
+  width: 85%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+.template:hover {
+  transform: scale(1.1);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+
+.template.zoomed {
+  z-index: 9999;
+}
+
+
+/* Get Started Button */
+.button-wrapper {
+  margin-top: 100px;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  position: relative;
+left: 50%;
+transform: translate(-50%, 20px);
+
+}
+
+/* Show the button when active */
+.button-wrapper.visible {
+  opacity: 1;
+  transform: translate(-50%, 0); /* now animates from center */
+  transition-delay: 0.1s;
+}
+
+
+.get-started-btn {
+  padding: 14px 28px;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.get-started-btn:hover {
+  background: #f0f0f0;
+}
+
+
+/* Fullscreen Zoom Effect */
+.fullscreen-zoom {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  z-index: 9999;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(255,255,255,0.3);
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+  opacity: 1;
+  background: white;
+  object-fit: contain;
+}
+
+.fullscreen-zoom.hide {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+
+/* Smart Resume Gradient Header */
+.animated-header {
+  font-size: 48px;
+  font-weight: bold;
+  margin-top: 60px;
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+
+
+
+  /* Gradient inside the text */
+  background: linear-gradient(270deg,
+  270deg,
+    #6a0dad,
+    #8e44ad,
+    #9b59b6,
+    #b084cc,
+    #d7bde2,
+    #1e90ff,
+    #00bfff,
+    #4682b4,
+    #5dade2,
+    #add8e6
+);
+
+
+  background-size: 600% 600%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  /* White border effect using text-shadow */
+  text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+
+  animation: gradientShift 5s ease infinite;
+}
+
+.tagline {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 20px;
+  color: rgb(199, 219, 11);
+  font-family: 'Merriweather', sans-serif;
+  opacity: 0.9;
+}
+/* Optional keyframe for animated gradient */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.description-line {
+  text-align: center;
+  font-size: 22px;
+  color: white;
+  font-family: 'Merriweather', sans-serif;
+  margin-bottom: 10px;
+  opacity: 0.95;
+}
+
+.browse-resumes {
+  text-align: center;
+  font-size: 18px;
+  color: #f0f0f0;
+  font-family: 'Merriweather', sans-serif;
+  margin-bottom: 20px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+/* ========== WHY CHOOSE US SECTION ========== */
+.why-choose-us {
+  text-align: center;
+  margin-top: 100px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+.why-choose-us h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #f7f4f8, oklab(98.761% -0.00064 -0.00169));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.features-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 0 20px;
+  
+}
+
+.feature-box {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 15px;
+  padding: 25px;
+  width: 230px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+}
+
+.feature-box h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #ffd700;
+}
+
+.feature-box p {
+  font-size: 0.95rem;
+  color: #f3f3f3;
+}
+
+
+/* ========== USER REVIEWS SECTION ========== */
+/* USER REVIEWS SECTION */
+.user-reviews {
+  text-align: center;
+  margin-top: 110px;
+  margin-bottom: 100px;
+  font-family: 'Poppins', sans-serif;
+  color: #333; /* Darker for better readability */
+}
+
+.user-reviews h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  background: linear-gradient(90deg, #f0f2f3, #ebe9ec);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Stack reviews vertically */
+.reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* Small space between reviews */
+  max-width: 900px;
+  margin: 0; /* Removes centering */
+  text-align: left;  /* Align left */
+  margin-left: 60px;  /* Move 60px from left */
+}
+
+/* Single review box */
+.review-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px 25px; /* Slightly more padding */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Top row: profile + name */
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 1px solid #ddd;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Stars below name */
+.stars {
+  color: gold;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  text-align: left;  /* Align left */
+}
+
+/* Review text */
+.review-text {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #333;
+  margin: 0;
+}
+
+
+/* ================= FOOTER ================= */
+.site-footer {
+  background-color: #2f2f2f;        /* soft dark grey */
+  color: #e6e6e6;                   /* light grey text */
+  text-align: center;
+  padding: 25px 15px 18px 15px;
+  margin-top: 60px;                 /* space above footer */
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Email link hover effect */
+.contact-info {
+  margin: 0;
+  color: #f0f0f0;
+  font-weight: 500;
+}
+
+.contact-info:hover {
+  color: #00bfff; /* subtle blue hover */
+  transition: color 0.3s ease;
+}
+
+.rights {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #bdbdbd;
+}
+
+@media (min-width: 700px) {
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+}
+.butterfly-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.butterfly {
+  position: absolute;
+  width: 60px;
+  opacity: 0.9;
+  transform-origin: center;
+  animation: flap 1s ease-in-out infinite;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+
+/* Wing flapping */
+@keyframes flap {
+  0%, 100% { transform: rotate(0deg) scaleY(1); }
+  50% { transform: rotate(5deg) scaleY(0.9); }
+}

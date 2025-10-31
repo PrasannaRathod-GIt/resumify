@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{{ name or "Your Name" }} — Resume</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='template3/style.css') }}">
+</head>
+<body>
+  <!-- Top control bar (place BEFORE or AFTER your resume container in DOM, but visually overlayed) -->
+<div id="top-controls" aria-hidden="false">
+  <button id="back-btn" class="control-btn">← Back</button>
+
+  <div class="download-group">
+    <button id="download-btn" class="control-btn">Download ▾</button>
+    <div id="download-menu" class="download-menu" role="menu" aria-hidden="true">
+      <button class="download-option" data-type="pdf">Download as PDF</button>
+      <button class="download-option" data-type="jpg">Download as JPG</button>
+    </div>
+  </div>
+</div>
+  <div class="resume-container" id="resume-content">
+
+    <!-- HEADER -->
+    <header class="resume-header" style="background-image: url('{{ url_for('static', filename='template3/bg.jpg') }}');">
+      <div class="header-overlay"></div>
+
+      <div class="header-inner">
+        <!-- profile circle absolute left -->
+        <div class="profile-pic">
+          {% if profile_image %}
+            <img src="{{ url_for('static', filename='uploads/' + profile_image) }}" alt="{{ name }}">
+          {% else %}
+            <img src="{{ url_for('static', filename='template3/default-profile.jpg') }}" alt="profile">
+          {% endif %}
+        </div>
+
+        <!-- large name/title at right, vertically centered -->
+        <div class="name-block">
+          <h1>{{ name }}</h1>
+          {% if title %}<h2>{{ title }}</h2>{% endif %}
+        </div>
+      </div>
+    </header>
+
+    <!-- BODY -->
+    <div class="resume-body">
+      <aside class="left-column">
+        <section class="section profile">
+          <h3>Personal Profile</h3>
+          <p>{{ profile }}</p>
+        </section>
+
+        <section class="section contact">
+          <h3>Contact</h3>
+           <ul class="contact-info">
+             {% if email %}<li><i class="fa-solid fa-envelope"></i> {{ email }}</li>{% endif %}
+             {% if phone %}<li><i class="fa-solid fa-phone"></i> {{ phone }}</li>{% endif %}
+             {% if linkedin %}<li><i class="fa-brands fa-linkedin"></i> {{ linkedin }}</li>{% endif %}
+             {% if location %}<li><i class="fa-solid fa-location-dot"></i> {{ location }}</li>{% endif %}
+           </ul>
+        </section>
+
+
+        <section class="section education">
+          <h3>Education</h3>
+          <p>
+            {% if edu_institution %}{{ edu_institution }}<br>{% endif %}
+            {% if edu_degree %}{{ edu_degree }}{% if edu_year %}, {{ edu_year }}{% endif %}{% endif %}
+          </p>
+        </section>
+      </aside>
+
+      <main class="right-column">
+        {% if skills %}
+        <section class="section skills">
+          <h3>Skills</h3>
+          <ul class="skills-list">
+            {% for s in skills %}
+              <li>{{ s }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        <section class="section experience">
+          <h3>Work Experience</h3>
+
+          {% if experiences %}
+            {% for exp in experiences %}
+              <div class="exp-item">
+                <div class="exp-heading">
+                  <strong>{{ exp.company }}</strong>
+                  {% if exp.role %}<span class="exp-role"> — {{ exp.role }}</span>{% endif %}
+                </div>
+
+                {% if exp.start or exp.end %}
+                  <div class="exp-date">
+                    {{ exp.start }}{% if exp.start and exp.end %} - {% endif %}{{ exp.end }}
+                  </div>
+                {% endif %}
+
+                {% if exp.desc %}
+                  <ul class="exp-desc">
+                    {% for d in exp.desc %}
+                      <li>{{ d }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="muted">No work experience entered.</p>
+          {% endif %}
+        </section>
+      </main>
+    </div>
+  </div>
+  <!-- Download & Back Button Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(() => {
+  const resumeNode = document.getElementById('resume-content');
+  const backBtn = document.getElementById('back-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const downloadMenu = document.getElementById('download-menu');
+
+  // 🔙 Back Button
+  if (backBtn) backBtn.addEventListener('click', () => {
+   window.location.href = "{{ url_for('template3_form') }}";
+  });
+
+  // 📂 Toggle dropdown
+  downloadBtn.addEventListener('click', () => {
+    downloadMenu.classList.toggle('show');
+  });
+  document.addEventListener('click', e => {
+    if (!downloadBtn.contains(e.target) && !downloadMenu.contains(e.target)) {
+      downloadMenu.classList.remove('show');
+    }
+  });
+
+  // 🖼 Wait for all images before capture
+  function waitForImages(node) {
+    const imgs = node.querySelectorAll("img");
+    return Promise.all(
+      [...imgs].map(
+        img => new Promise(res => {
+          if (img.complete) res();
+          else { img.onload = img.onerror = res; }
+        })
+      )
+    );
+  }
+
+  // 📸 Download as JPG
+  async function downloadAsJpg() {
+    try {
+      await waitForImages(resumeNode);
+      const canvas = await html2canvas(resumeNode, {
+        scale: 3,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: resumeNode.scrollWidth,
+        windowHeight: resumeNode.scrollHeight
+      });
+      const link = document.createElement('a');
+      link.download = 'resume.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 1.0);
+      link.click();
+    } catch (err) {
+      console.error("JPG download failed:", err);
+      alert("Failed to export JPG — check console for details.");
+    }
+  }
+
+  // 📄 Download as PDF (no cropping, full width visible)
+  async function downloadAsPdf() {
+    try {
+      console.log("Preparing precise PDF export...");
+      await waitForImages(resumeNode);
+
+      const canvas = await html2canvas(resumeNode, {
+        scale: 3,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        backgroundColor: '#ffffff',
+        windowWidth: resumeNode.scrollWidth,
+        windowHeight: resumeNode.scrollHeight
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // ✅ Fit to full width, maintaining aspect ratio (no cropping)
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let yPosition = 0;
+      if (imgHeight < pageHeight) {
+        yPosition = (pageHeight - imgHeight) / 2;
+      }
+
+      pdf.addImage(imgData, 'PNG', 0, yPosition, imgWidth, imgHeight);
+      pdf.save('resume.pdf');
+      console.log("PDF download triggered successfully.");
+    } catch (err) {
+      console.error("PDF export failed:", err);
+      alert("Failed to export PDF — check console for details.");
+    }
+  }
+
+  // ⚡ Handle dropdown options
+  document.querySelectorAll('.download-option').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const type = e.target.dataset.type;
+      downloadMenu.classList.remove('show');
+      if (type === 'pdf') downloadAsPdf();
+      else if (type === 'jpg') downloadAsJpg();
+    });
+  });
+})();
+</script>
+</body>
+</html>

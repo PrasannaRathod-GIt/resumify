@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Template 3 — Resume Form</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --gap:12px; }
+    body{font-family:Inter, "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f4f6f8; margin:0; padding:28px;}
+    .wrap{max-width:980px; margin:0 auto; background:#fff; padding:22px; border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,.06);}
+    h1{margin:0 0 14px; font-family:"Montserrat",sans-serif; letter-spacing:0.5px;}
+    form{display:grid; gap:18px;}
+    fieldset{border:1px solid #eef1f5;margin-bottom: 10px;    /* space between fieldsets */ padding:14px; border-radius:8px;}
+    label{display:block; font-weight:600; margin-bottom:6px; font-size:13px;}
+    input, textarea, select{width:100%; padding:10px; border-radius:8px; border:1px solid #e3e6ea; font-size:14px; background:#fbfcfd;}
+    textarea{min-height:100px; resize:vertical;}
+    .grid-2{display:grid; grid-template-columns: 1fr 1fr; gap:var(--gap);}
+    .grid-3{display:grid; grid-template-columns: repeat(3,1fr); gap:var(--gap);}
+    /* Add slight gap between side-by-side input boxes */
+.grid-2 > div:not(:last-child),
+.grid-3 > div:not(:last-child) {
+  margin-right: 6px; /* Adjust this number for more/less spacing */
+}
+
+/* Ensure boxes don’t stretch edge-to-edge */
+.grid-2 input,
+.grid-3 input {
+  width: 98%; /* slightly narrower than full width */
+}
+
+    .line-box{display:flex; gap:8px; align-items:center; margin-bottom:8px;}
+    .line-box input{flex:1;}
+    .btn {background:#2f6df6; color:#fff; padding:10px 14px; border-radius:8px; border:0; cursor:pointer;}
+    .muted{color:#777; font-size:13px;}
+    /* Add space between stacked input boxes */
+input, textarea, select {
+  margin-bottom: 8px;  /* adds vertical space between boxes */
+}
+:root {
+  --gap: 16px;  /* was 12px */
+}
+legend {
+  font-size: 18px;        /* larger section titles */
+  font-weight: 700;
+  color: rgba(8, 58, 65, 0.9);
+  margin-bottom: 8px;
+}
+
+label {
+  font-size: 15px;        /* larger field titles */
+  font-weight: 600;
+  color: #333;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Template 3 — Resume Inputs</h1>
+    <p class="muted">Fill fields and click Preview. Use the blue "Enter ➕" buttons to add multiple skills or description lines.</p>
+
+    <form action="{{ url_for('template3_preview') }}" method="POST" enctype="multipart/form-data">
+      <!-- Header -->
+      <fieldset>
+        <legend>Header</legend>
+        <div class="grid-2">
+          <div>
+            <label for="name">Full name</label>
+            <input id="name" name="name" placeholder="e.g., TIMOTHY STUART" required>
+          </div>
+          <div>
+            <label for="title">Job title</label>
+            <input id="title" name="title" placeholder="e.g., Marketing Assistant" required>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label for="profile_image">Upload profile image</label>
+          <input id="profile_image" name="profile_image" type="file" accept="image/*">
+        </div>
+      </fieldset>
+
+      <!-- Profile -->
+      <fieldset>
+        <legend>Profile Profile</legend>
+        <label for="profile">Profile</label>
+        <textarea id="profile" name="profile" placeholder="A short professional summary..."></textarea>
+      </fieldset>
+
+      <!-- Contact -->
+      <fieldset>
+        <legend>Contact</legend>
+        <div class="grid-2">
+          <div>
+            <label for="location">Location</label>
+            <input id="location" name="location" placeholder="City, State">
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com">
+          </div>
+
+          <div>
+            <label for="linkedin">LinkedIn</label>
+            <input id="linkedin" name="linkedin" placeholder="linkedin.com/in/username">
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" placeholder="+91 90000 00000">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Education -->
+      <fieldset>
+        <legend>Education</legend>
+        <div class="grid-3">
+          <div><label for="edu_institution">Institution</label><input id="edu_institution" name="edu_institution"></div>
+         <div><label for="edu_degree">Degree / Diploma / BTech etc.</label><input id="edu_degree" name="edu_degree"></div>
+          <div><label for="edu_year">Year</label><input id="edu_year" name="edu_year"></div>
+        </div>
+      </fieldset>
+
+      <!-- Skills (one per line) -->
+      <fieldset>
+        <legend>Skills <small class="muted"> (one per line)</small></legend>
+        <div id="skillsList">
+          <div class="line-box">
+            <input name="skills[]" placeholder="Type a skill and press Enter or click ➕">
+            <button type="button" class="btn" onclick="addLine('skillsList','skills[]')">Enter ➕</button>
+          </div>
+        </div>
+        <p class="muted">Skills will appear as a vertical list in preview.</p>
+      </fieldset>
+
+      <!-- Experiences (up to 3) -->
+      <fieldset>
+        <legend>Experience 1</legend>
+        <div class="grid-2">
+          <div><label>Company</label><input name="exp1_company"></div>
+          <div><label>Role</label><input name="exp1_role"></div>
+          <div><label>Start (e.g. 2021-05)</label><input name="exp1_start" placeholder="YYYY-MM"></div>
+          <div><label>End (e.g. 2022-08)</label><input name="exp1_end" placeholder="YYYY-MM or Present"></div>
+        </div>
+        <div id="exp1Desc" style="margin-top:10px;">
+          <div class="line-box">
+            <input name="exp1_desc[]" placeholder="Description bullet">
+            <button type="button" class="btn" onclick="addLine('exp1Desc','exp1_desc[]')">Enter ➕</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Experience 2</legend>
+        <div class="grid-2">
+          <div><label>Company</label><input name="exp2_company"></div>
+          <div><label>Role</label><input name="exp2_role"></div>
+          <div><label>Start</label><input name="exp2_start"></div>
+          <div><label>End</label><input name="exp2_end"></div>
+        </div>
+        <div id="exp2Desc" style="margin-top:10px;">
+          <div class="line-box">
+            <input name="exp2_desc[]" placeholder="Description bullet">
+            <button type="button" class="btn" onclick="addLine('exp2Desc','exp2_desc[]')">Enter ➕</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Experience 3</legend>
+        <div class="grid-2">
+          <div><label>Company</label><input name="exp3_company"></div>
+          <div><label>Role</label><input name="exp3_role"></div>
+          <div><label>Start</label><input name="exp3_start"></div>
+          <div><label>End</label><input name="exp3_end"></div>
+        </div>
+        <div id="exp3Desc" style="margin-top:10px;">
+          <div class="line-box">
+            <input name="exp3_desc[]" placeholder="Description bullet">
+            <button type="button" class="btn" onclick="addLine('exp3Desc','exp3_desc[]')">Enter ➕</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <div style="display:flex; gap:12px; justify-content:flex-end;">
+        <button type="reset" class="btn" style="background:#9aa9c9">Reset</button>
+        <button type="submit" class="btn">Preview</button>
+      </div>
+    </form>
+  </div>
+
+<script>
+  function addLine(containerId, fieldName, value = "") {
+    const container = document.getElementById(containerId);
+    const row = document.createElement("div");
+    row.className = "line-box";
+
+    const input = document.createElement("input");
+    input.name = fieldName;
+    input.value = value;
+    input.placeholder = "Type and press Enter or click ➕";
+
+    input.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addLine(containerId, fieldName, "");
+      }
+    });
+
+    const add = document.createElement("button");
+    add.type = "button";
+    add.className = "btn";
+    add.textContent = "Enter ➕";
+    add.addEventListener("click", () => addLine(containerId, fieldName, ""));
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.style.background = "#fff";
+    remove.style.border = "1px solid #eee";
+    remove.style.padding = "8px";
+    remove.style.borderRadius = "8px";
+    remove.textContent = "✖";
+    remove.addEventListener("click", () => row.remove());
+
+    row.appendChild(input);
+    row.appendChild(add);
+    row.appendChild(remove);
+    container.appendChild(row);
+    input.focus();
+  }
+</script>
+</body>
+</html>

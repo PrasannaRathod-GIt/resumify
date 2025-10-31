@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ name }} — Resume</title>
+    <!-- Font Awesome must load FIRST -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-KVWBOmIkCwV5+ZnmHrUFrp6KuRDCgWQco2sR1GThUgxCC3oCV3n0bmvxQ8tHBe+J1F9XzzCwnJ4MyVdpRrJtvg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Fonts and then your custom CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='template5/style.css') }}">
+  
+</head>
+<body>
+
+  <!-- Top control bar (place BEFORE or AFTER your resume container in DOM, but visually overlayed) -->
+<div id="top-controls" aria-hidden="false">
+  <button id="back-btn" class="control-btn">← Back</button>
+
+  <div class="download-group">
+    <button id="download-btn" class="control-btn">Download ▾</button>
+    <div id="download-menu" class="download-menu" role="menu" aria-hidden="true">
+      <button class="download-option" data-type="pdf">Download as PDF</button>
+      <button class="download-option" data-type="jpg">Download as JPG</button>
+    </div>
+  </div>
+</div>
+  
+  <div id="resume-preview" class="resume-shell">
+
+    <aside class="left-column">
+      <div class="photo-wrap">
+        {% if profile_photo %}
+          <img src="{{ url_for('static', filename='uploads/' + profile_photo) }}" alt="Profile photo">
+        {% else %}
+          <div class="photo-placeholder"></div>
+        {% endif %}
+      </div>
+
+      <div class="education-section">
+  <h4 class="section-title">EDUCATION -</h4>
+  <ul class="education-list">
+    {% for e in education %}
+      <li>{{ e }}</li>
+    {% else %}
+      <li>No education provided</li>
+    {% endfor %}
+  </ul>
+</div>
+
+      <div class="contact-section">
+  <h4 class="section-title">CONTACT ME</h4>
+  <div class="contact-block">
+    {% if phone %}
+      <div><i class="fa-solid fa-phone"></i> {{ phone }}</div>
+    {% endif %}
+    {% if email %}
+      <div><i class="fa-solid fa-envelope"></i> {{ email }}</div>
+    {% endif %}
+    {% if linkedin %}
+      <div><i class="fa-brands fa-linkedin"></i> {{ linkedin }}</div>
+    {% endif %}
+    {% if address %}
+      <div><i class="fa-solid fa-location-dot"></i> {{ address }}</div>
+    {% endif %}
+  </div>
+</div>
+
+
+    </aside>
+
+    <main class="right-column">
+      <header class="header-area">
+        <div class="name-wrap">
+          <h1 class="name">{{ name }}</h1>
+          <p class="title">{{ title }}</p>
+        </div>
+      </header>
+
+      <section class="content-block">
+        <h4 class="block-title">PROFILE -</h4>
+        <p class="profile-text">{{ about or 'No profile text provided' }}</p>
+      </section>
+
+      <section class="content-block">
+        <h4 class="block-title">LANGUAGE</h4>
+        <ul class="simple-list">
+          {% for l in languages %}
+            <li>{{ l }}</li>
+          {% else %}
+            <li>Not specified</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="content-block">
+        <h4 class="block-title">TECHNICAL SKILLS -</h4>
+        <div class="skill-chips">
+          {% for s in skills %}
+            <span class="chip">{{ s }}</span>
+          {% else %}
+            <div>No skills added</div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="content-block">
+        <h4 class="block-title">CERTIFICATES -</h4>
+        <ul class="cert-list">
+          {% for c in certificates %}
+            <li><strong>{{ c.name }}</strong><br><small>{{ c.provider }}</small></li>
+          {% else %}
+            <li>No certificates</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </main>
+  </div>
+  <!-- Download & Back Button Scripts -->
+<!-- ✅ Better Export Script (Fixes Cropping & Quality) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(() => {
+  const resumeNode = document.getElementById('resume-preview');
+  const backBtn = document.getElementById('back-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const downloadMenu = document.getElementById('download-menu');
+
+  // Back Button
+  if (backBtn) backBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('form_template5') }}";
+  });
+
+  // Toggle dropdown
+  downloadBtn.addEventListener('click', () => {
+    downloadMenu.classList.toggle('show');
+  });
+  document.addEventListener('click', e => {
+    if (!downloadBtn.contains(e.target) && !downloadMenu.contains(e.target)) {
+      downloadMenu.classList.remove('show');
+    }
+  });
+
+  // Wait for all images before capture
+  function waitForImages(node) {
+    const imgs = node.querySelectorAll("img");
+    return Promise.all(
+      [...imgs].map(
+        img => new Promise(res => {
+          if (img.complete) res();
+          else { img.onload = img.onerror = res; }
+        })
+      )
+    );
+  }
+
+  // 📸 Download as JPG
+  async function downloadAsJpg() {
+    await waitForImages(resumeNode);
+    html2canvas(resumeNode, {
+      scale: 3,
+      useCORS: true,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: document.documentElement.scrollWidth,
+      windowHeight: document.documentElement.scrollHeight
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'resume.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 1.0);
+      link.click();
+    });
+  }
+
+  // 📄 Download as PDF
+  // 📄 Download as PDF (edge-to-edge, no white margin)
+async function downloadAsPdf() {
+  try {
+    console.log("Preparing precise PDF export...");
+    await waitForImages(resumeNode);
+
+    const canvas = await html2canvas(resumeNode, {
+      scale: 3,
+      useCORS: true,
+      scrollX: 0,
+      scrollY: 0,
+      backgroundColor: '#ffffff',
+      windowWidth: document.documentElement.scrollWidth,
+      windowHeight: document.documentElement.scrollHeight
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    // Calculate proportions
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    // ⚙️ If the image height is smaller than a page, center it vertically
+    // Otherwise, just fit it top-aligned (to avoid white gaps)
+    let yPosition = 0;
+    if (imgHeight < pageHeight) {
+      yPosition = (pageHeight - imgHeight) / 2;
+    } else {
+      yPosition = 0;
+    }
+
+    // ⬇️ Add the image exactly scaled — no extra top/bottom area
+    pdf.addImage(imgData, 'PNG', 0, yPosition, imgWidth, imgHeight);
+
+    pdf.save('resume.pdf');
+    console.log("PDF download triggered successfully.");
+  } catch (err) {
+    console.error("PDF export failed:", err);
+    alert('Failed to export PDF — check console for details.');
+  }
+}
+
+
+  // Handle dropdown options
+  document.querySelectorAll('.download-option').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const type = e.target.dataset.type;
+      downloadMenu.classList.remove('show');
+      if (type === 'pdf') downloadAsPdf();
+      else if (type === 'jpg') downloadAsJpg();
+    });
+  });
+})();
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ name }} - Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  body { font-family: 'Poppins', sans-serif; }
+</style>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='template2/style.css') }}">
+</head>
+<body>
+  <!-- Top control bar (place BEFORE or AFTER your resume container in DOM, but visually overlayed) -->
+<div id="top-controls" aria-hidden="false">
+  <button id="back-btn" class="control-btn">← Back</button>
+
+  <div class="download-group">
+    <button id="download-btn" class="control-btn">Download ▾</button>
+    <div id="download-menu" class="download-menu" role="menu" aria-hidden="true">
+      <button class="download-option" data-type="pdf">Download as PDF</button>
+      <button class="download-option" data-type="jpg">Download as JPG</button>
+    </div>
+  </div>
+</div>
+  <div class="resume" id="resume-content">
+    <div class="left">
+      {% if profile_photo %}
+  <img src="{{ url_for('static', filename='uploads/' ~ profile_photo) }}" class="profile-photo" alt="Profile Photo">
+{% else %}
+  <img src="{{ url_for('static', filename='template2/profile.jpg') }}" class="profile-photo" alt="Profile Photo">
+{% endif %}
+
+
+     <div class="contact-item">
+  <i class="fa-solid fa-phone icon"></i>
+  <span class="text">{{ phone }}</span>
+</div>
+<div class="contact-item">
+  <i class="fa-solid fa-envelope icon"></i>
+  <span class="text">{{ email }}</span>
+</div>
+<div class="contact-item">
+  <i class="fa-solid fa-globe icon"></i>
+  <span class="text">{{ website }}</span>
+</div>
+<div class="contact-item">
+  <i class="fa-solid fa-location-dot icon"></i>
+  <span class="text">{{ address }}</span>
+</div>
+
+
+
+      <div class="section">
+  <h3>EDUCATION</h3>
+  <ul>
+    {% for edu in education %}
+      <li>{{ edu }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+
+      <div class="section">
+        <h3>EXPERTISE</h3>
+        <ul>
+          {% for skill in expertise %}
+            <li>{{ skill }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>LANGUAGE</h3>
+        <ul>
+          {% for lang in languages %}
+            <li>{{ lang }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="right">
+      <h1>{{ name }}</h1>
+      <h2>{{ title }}</h2>
+      <hr>
+
+      <div class="section">
+        <h3>ABOUT ME</h3>
+        <p>{{ about }}</p>
+      </div>
+
+      {% if not no_experience %}
+      <div class="section">
+        <h3>WORK EXPERIENCE</h3>
+        {% for job in [
+            {'duration': job1_duration, 'company': job1_company, 'position': job1_position, 'desc': job1_desc},
+            {'duration': job2_duration, 'company': job2_company, 'position': job2_position, 'desc': job2_desc},
+            {'duration': job3_duration, 'company': job3_company, 'position': job3_position, 'desc': job3_desc}
+          ] if job['company'] %}
+          <div class="job">
+            <p><strong>{{ job.duration }}</strong> – {{ job.company }}</p>
+            <p><em>{{ job.position }}</em></p>
+            <p>{{ job.desc }}</p>
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="section">
+        <h3>INTERNSHIPS</h3>
+        <p>{{ internships }}</p>
+      </div>
+    </div>
+  </div>
+  <!-- Download & Back Button Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(() => {
+  const resumeNode = document.getElementById('resume-content');
+  const backBtn = document.getElementById('back-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const downloadMenu = document.getElementById('download-menu');
+
+  // 🔙 Back Button
+  if (backBtn) backBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('form_template2') }}";
+  });
+
+  // 📂 Toggle dropdown
+  downloadBtn.addEventListener('click', () => {
+    downloadMenu.classList.toggle('show');
+  });
+  document.addEventListener('click', e => {
+    if (!downloadBtn.contains(e.target) && !downloadMenu.contains(e.target)) {
+      downloadMenu.classList.remove('show');
+    }
+  });
+
+  // 🖼 Wait for all images before capture
+  function waitForImages(node) {
+    const imgs = node.querySelectorAll("img");
+    return Promise.all(
+      [...imgs].map(
+        img => new Promise(res => {
+          if (img.complete) res();
+          else { img.onload = img.onerror = res; }
+        })
+      )
+    );
+  }
+
+  // 📸 Download as JPG
+  async function downloadAsJpg() {
+    try {
+      await waitForImages(resumeNode);
+      const canvas = await html2canvas(resumeNode, {
+        scale: 3,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: resumeNode.scrollWidth,
+        windowHeight: resumeNode.scrollHeight
+      });
+      const link = document.createElement('a');
+      link.download = 'resume.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 1.0);
+      link.click();
+    } catch (err) {
+      console.error("JPG download failed:", err);
+      alert("Failed to export JPG — check console for details.");
+    }
+  }
+
+  // 📄 Download as PDF (no cropping, full width visible)
+  async function downloadAsPdf() {
+    try {
+      console.log("Preparing precise PDF export...");
+      await waitForImages(resumeNode);
+
+      const canvas = await html2canvas(resumeNode, {
+        scale: 3,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        backgroundColor: '#ffffff',
+        windowWidth: resumeNode.scrollWidth,
+        windowHeight: resumeNode.scrollHeight
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // ✅ Fit to full width, maintaining aspect ratio (no cropping)
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let yPosition = 0;
+      if (imgHeight < pageHeight) {
+        yPosition = (pageHeight - imgHeight) / 2;
+      }
+
+      pdf.addImage(imgData, 'PNG', 0, yPosition, imgWidth, imgHeight);
+      pdf.save('resume.pdf');
+      console.log("PDF download triggered successfully.");
+    } catch (err) {
+      console.error("PDF export failed:", err);
+      alert("Failed to export PDF — check console for details.");
+    }
+  }
+
+  // ⚡ Handle dropdown options
+  document.querySelectorAll('.download-option').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const type = e.target.dataset.type;
+      downloadMenu.classList.remove('show');
+      if (type === 'pdf') downloadAsPdf();
+      else if (type === 'jpg') downloadAsJpg();
+    });
+  });
+})();
+</script>
+</body>
+</html>

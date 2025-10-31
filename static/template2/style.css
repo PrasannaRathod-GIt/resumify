@@ -1,0 +1,248 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fefefe;
+}
+
+.resume {
+  display: flex;
+  max-width: 950px;           /* Reduced from 1000px */
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px #ccc;
+  min-height: 950px;     /* optional: ensures minimum size like A4 */
+  margin-top: 2px;
+}
+
+.left {
+  width: 33%;                 /* Slightly narrower */
+  background-color: #f4e6e6;
+  padding: 30px 20px;
+  
+}
+
+.right {
+  width: 67%;                 /* Slightly wider */
+  padding: 30px;
+  background-color: #fff;
+  overflow-y: auto;           /* Ensures no layout breaks */
+}
+
+.profile-photo {
+  width: 132px;              /* Increased from 120px (3% bigger) */
+  height: 132px;             /* Same scale */
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: -19px;         /* Shifted slightly more up */
+  margin-bottom: 35px;
+  display: block;
+  margin: -23px auto 35px auto;  /* move up by increasing negative top margin */
+  transform: translateX(12px);  /* move 15px right */
+}
+
+
+.contact {
+  margin-top: 60px; /* this adds space BETWEEN image and contact */
+  margin-bottom: 30px; 
+}
+
+
+
+.contact p, .section p {
+  margin: 5px 0;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+h1 {
+  font-size: 29px;
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: normal;
+  color: #666;
+  margin: 5px 0 20px;
+}
+
+h3 {
+  margin-top: 40px;
+  font-size: 16px;
+  color: #333;
+}
+
+ul {
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.job {
+  margin-bottom: 20px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #ddd;
+  margin-bottom: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;   /* align top of text with icon */
+  margin-bottom: 10px;
+  text-align: left;          /* override parent's center alignment */
+}
+
+.contact-item .icon {
+  width: 28px;
+  text-align: center;
+  font-size: 16px;
+  color: #212130;
+  margin-right: 12px;
+  flex-shrink: 0;            /* prevent icon from shrinking */
+}
+
+.contact-item .text {
+  font-size: 14px;
+  color: #333;
+  text-align: left;          /* force text left */
+  word-break: break-word;    /* break long words */
+  flex: 1;                   /* let text take remaining space */
+}
+
+
+.contact-item .icon {
+  width: 28px;           /* wider fixed width for proper spacing */
+  text-align: center;
+  font-size: 16px;
+  color: #212130;
+  margin-right: 12px;    /* space between icon and text */
+}
+
+
+
+
+.contact-item .text {
+  font-size: 14px;
+  color: #333;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid #aaa;
+}
+
+.timeline-entry {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.timeline-entry::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  background: #333;
+  border-radius: 50%;
+}
+
+.header {
+  background-color: #f8dcdc;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* Move only Education, Expertise, Language headings a bit right */
+.left h3 {
+  margin-left: 20px;   /* push heading text right */
+}
+.left ul,
+.left .section p {   /* for other section paragraphs */
+    font-size: 15px;  /* slightly bigger than 14px */
+    line-height: 1.5; /* improves readability */
+}
+/* ✅ Top control bar (fully clickable) */
+#top-controls {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: auto; /* ✅ make it fully interactive */
+}
+
+/* Buttons */
+.control-btn {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.control-btn:hover {
+  background: rgba(0,0,0,0.05);
+  transform: translateY(-1px);
+}
+
+/* Dropdown group */
+#top-controls .download-group {
+  position: relative;
+  margin-left: auto;
+}
+
+/* Dropdown menu */
+.download-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  min-width: 160px;
+  z-index: 10000; /* ✅ keep on top */
+}
+
+/* Show when active */
+.download-menu.show {
+  display: block;
+}
+
+/* Menu options */
+.download-option {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.download-option:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* Body padding so controls don't overlap */
+body {
+  padding-top: 60px;
+}

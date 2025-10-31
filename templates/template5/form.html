@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Template 5 - Input</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='template5/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-p0fH+Q5cP0ro8kBJd8iTJQ+3ZkXbXOoPjNbdjlODxGbk3RkPCtT2v7XxOaZunZf0+Uvl5U/ugSl3fFjZdTytjQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>
+/* === Resume Left Side Typography Adjustments === */
+/* For inputs inside dynamic sections */
+.entry-container input,
+.skills-container input {
+    width: 100%;      /* full width */
+    box-sizing: border-box;  /* ensures padding doesn’t break layout */
+    margin-bottom: 10px;     /* spacing between lines */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#certs-list input {
+    width: 48%;         /* two fields side by side (name & provider) */
+    display: inline-block;
+    margin-right: 4%;
+    margin-bottom: 10px;
+}
+#certs-list input:last-child {
+    margin-right: 0;    /* last input in row */
+}
+
+/* Section titles (like CONTACT, EDUCATION, etc.) */
+.left h3 {
+  font-size: 1.2rem;   /* previously around 1rem */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Increase inner text (like phone number, email, etc.) */
+.left p, .left li, .left span {
+  font-size: 0.95rem;   /* slightly larger */
+  line-height: 1.6;
+}
+
+/* Increase icon size just a little */
+.left i {
+  font-size: 1.1rem;   /* default is around 1rem */
+  margin-right: 6px;
+}
+
+/* Optional: ensure long text wraps neatly */
+.left {
+  word-wrap: break-word;
+}
+
+/* If you want right column to adjust gracefully too */
+.right {
+  flex: 1;
+  padding-left: 25px;
+}
+
+/* Ensures full resume content adjusts to longer data comfortably */
+.resume {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  max-width: 950px;
+  width: 100%;
+  margin: auto;
+  box-sizing: border-box;
+}
+</style>
+
+</head>
+<body>
+  <form method="POST" action="/preview/template5" enctype="multipart/form-data" class="cv-form">
+    <h2>Template 5 — Enter your details</h2>
+
+    <div class="row">
+      <label>Name</label>
+      <input type="text" name="name" placeholder="Full name">
+    </div>
+
+    <div class="row">
+      <label>Title</label>
+      <input type="text" name="title" placeholder="Student / Software Engineer">
+    </div>
+
+    <div class="row">
+      <label>Upload profile photo</label>
+      <input type="file" name="photo" accept="image/*">
+    </div>
+
+    <h3>Contact</h3>
+    <div class="row">
+      <label><i class="fa-solid fa-phone"></i> Phone</label>
+      <input type="text" name="phone">
+    </div>
+
+    <div class="row">
+      <label><i class="fa-solid fa-envelope"></i> Email</label>
+      <input type="email" name="email">
+    </div>
+
+    <div class="row">
+      <label><i class="fa-brands fa-linkedin"></i> LinkedIn</label>
+      <input type="text" name="linkedin">
+    </div>
+
+    <div class="row">
+      <label><i class="fa-solid fa-location-dot"></i> Address</label>
+      <input type="text" name="address">
+    </div>
+
+    <h3>Profile</h3>
+    <div class="row">
+      <label>About me</label>
+      <textarea name="about" rows="4" placeholder="Brief summary"></textarea>
+    </div>
+
+    <h3>Education</h3>
+    <div id="education-container" class="entry-container">
+      <div id="education-list"></div>
+      <div class="entry-actions">
+        <button type="button" class="add-btn" onclick="addEducation()">+ Add new education</button>
+      </div>
+
+      <input type="hidden" name="education" id="education-hidden">
+    </div>
+
+    <h3>Technical skills</h3>
+<div class="skills-container">
+  <div id="skills-list"></div>
+  <input type="text" id="skills-input" placeholder="Start typing a skill...">
+  <ul id="skills-suggestions" class="suggestion-box"></ul>
+  <div class="entry-actions">
+    <button type="button" class="add-btn" onclick="addNewSkill()">+ Add new technical skill</button>
+  </div>
+  <input type="hidden" name="skills" id="skills-hidden">
+</div>
+
+    <h3>Languages</h3>
+<div class="skills-container">
+  <div id="language-list"></div>
+  <input type="text" id="language-input" placeholder="Start typing a language...">
+  <ul id="language-suggestions" class="suggestion-box"></ul>
+  <div class="entry-actions">
+    <button type="button" class="add-btn" onclick="addNewLanguage()">+ Add new language</button>
+  </div>
+  <input type="hidden" name="languages" id="language-hidden">
+</div>
+
+    <h3>Certificates</h3>
+    <div id="certs-container" class="entry-container">
+      <div id="certs-list"></div>
+      <div class="entry-actions">
+        <button type="button" onclick="addCertificate()">+ Add certificate</button>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit">Generate Resume</button>
+    </div>
+  </form>
+
+  <script>
+    // ---------- dataset for autosuggest ----------
+    const skillData = [
+      "Python","Java","C","C++","JavaScript","TypeScript","HTML","CSS","React.js","Node.js","Django",
+      "Flask","TensorFlow","Keras","PyTorch","SQL","PostgreSQL","MongoDB","Git","Docker","AWS",
+      "Firebase","Flutter","Unity","Data Analysis","Machine Learning","Deep Learning","SEO","UI/UX"
+    ];
+    const languageData = [
+      "English (Basic)", "English (Intermediate)", "English (Advanced)",
+      "Hindi (Basic)", "Hindi (Intermediate)", "Hindi (Advanced)",
+      "Spanish (Basic)", "Spanish (Intermediate)", "Spanish (Advanced)",
+      "French (Basic)", "French (Intermediate)", "French (Advanced)"
+    ];
+    // ---------- manual add buttons for skills and languages ----------
+function addNewSkill() {
+  const input = document.getElementById('skills-input');
+  const val = input.value.trim();
+  if (val) {
+    skillsWidget.addItem(val);
+  } else {
+    alert("Type a skill first, then click Add New Technical Skill.");
+  }
+}
+
+function addNewLanguage() {
+  const input = document.getElementById('language-input');
+  const val = input.value.trim();
+  if (val) {
+    langWidget.addItem(val);
+  } else {
+    alert("Type a language first, then click Add New Language.");
+  }
+}
+
+    // ---------- reusable autosuggest and chips ----------
+    function setupAutoSuggest(inputId, suggestionId, listId, hiddenId, dataSet) {
+      const input = document.getElementById(inputId);
+      const suggestions = document.getElementById(suggestionId);
+      const list = document.getElementById(listId);
+      const hidden = document.getElementById(hiddenId);
+      let selected = [];
+
+      input.addEventListener('input', () => {
+        const val = input.value.toLowerCase().trim();
+        suggestions.innerHTML = '';
+        if (!val) { suggestions.style.display = 'none'; return; }
+        const matches = dataSet.filter(item =>
+          item.toLowerCase().startsWith(val) && !selected.includes(item)
+        ).slice(0, 10);
+        matches.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          li.onclick = () => addItem(item);
+          suggestions.appendChild(li);
+        });
+        suggestions.style.display = matches.length ? 'block' : 'none';
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const val = input.value.trim();
+          if (val) addItem(val);
+        }
+      });
+
+      function addItem(item) {
+        if (!selected.includes(item)) {
+          selected.push(item);
+          const chip = document.createElement('div');
+          chip.className = 'skill-chip';
+          chip.textContent = item;
+          const close = document.createElement('span');
+          close.textContent = '×';
+          close.onclick = () => removeItem(item, chip);
+          chip.appendChild(close);
+          list.appendChild(chip);
+          updateHidden();
+        }
+        input.value = '';
+        suggestions.style.display = 'none';
+      }
+
+      function removeItem(item, chip) {
+        selected = selected.filter(i => i !== item);
+        chip.remove();
+        updateHidden();
+      }
+
+      function updateHidden() {
+        hidden.value = selected.join(',');
+      }
+
+      return { addItem };
+    }
+
+    const skillsWidget = setupAutoSuggest('skills-input', 'skills-suggestions', 'skills-list', 'skills-hidden', skillData);
+    const langWidget = setupAutoSuggest('language-input', 'language-suggestions', 'language-list', 'language-hidden', languageData);
+
+    // ---------- education add-line mechanism ----------
+    function addEducation(value = '') {
+      const container = document.getElementById('education-list');
+      const div = document.createElement('div');
+      div.className = 'edu-entry';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = "Example: B.Sc. Computer Science — Deogiri College, 2023";
+      input.value = value;
+      input.oninput = updateEducationHidden;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'mini-remove';
+      removeBtn.textContent = '×';
+      removeBtn.onclick = () => { div.remove(); updateEducationHidden(); };
+
+      div.appendChild(input);
+      div.appendChild(removeBtn);
+      container.appendChild(div);
+      updateEducationHidden();
+    }
+
+    function updateEducationHidden() {
+      const inputs = document.querySelectorAll('#education-list input');
+      const vals = Array.from(inputs).map(i => i.value.trim()).filter(Boolean);
+      document.getElementById('education-hidden').value = vals.join('||');
+    }
+
+    // ---------- certificates dynamic ----------
+    function addCertificate(name = '', provider = '') {
+      const container = document.getElementById('certs-list');
+      const wrap = document.createElement('div');
+      wrap.className = 'cert-entry';
+
+      const n = document.createElement('input');
+      n.type = 'text';
+      n.name = 'cert_name[]';
+      n.placeholder = 'Certificate title (e.g., Java Programming)';
+      n.value = name;
+
+      const p = document.createElement('input');
+      p.type = 'text';
+      p.name = 'cert_provider[]';
+      p.placeholder = 'Provider (e.g., Coursera)';
+      p.value = provider;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'mini-remove';
+      removeBtn.textContent = '×';
+      removeBtn.onclick = () => wrap.remove();
+
+      wrap.appendChild(n);
+      wrap.appendChild(p);
+      wrap.appendChild(removeBtn);
+      container.appendChild(wrap);
+    }
+
+    // create one empty education and certificate line by default
+    window.addEventListener('DOMContentLoaded', () => {
+      addEducation('');
+      addCertificate();
+    });
+  </script>
+</body>
+</html>

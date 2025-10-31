@@ -1,0 +1,235 @@
+/* Base */
+:root{
+  --maroon:#7b3f46; /* header color like your sample */
+  --maroon-dark:#6a3540;
+  --text:#333;
+  --muted:#777;
+  --rule:#e9e9e9;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Poppins',sans-serif;
+  background:#fff; /* full white page (as requested) */
+  color:var(--text);
+}
+
+/* Card wrapper */
+.resume{
+  max-width:1000px;
+  margin:28px auto;
+  border-radius:16px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
+  overflow:hidden;
+  background:#fff;
+}
+
+/* Header */
+.resume-header{
+  background:var(--maroon);
+  color:#fff;
+  padding: 10px 10px;   /* <- reduce top-bottom padding */
+  min-height: 10px;    /* <- lower this to shrink header */
+  display: flex;
+  align-items: center;
+}
+
+
+.header-inner{
+  position:relative;
+  padding:60px 50px 10px; /* extra bottom for photo overlap */
+}
+
+/* Photo: 70% inside header, 30% into body */
+.profile-wrap{
+  position:absolute;
+  left:48px;
+  bottom:-30px;     /* <- controls how much photo dips into body */
+  width:180px;      /* <- size of photo */
+  height:180px;
+  border-radius:50%;
+  overflow:hidden;
+  border:6px solid #fff;
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
+}
+
+.profile-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Name / role */
+.heading{
+  margin-left:250px; /* leave space so text doesn't overlap photo */
+}
+.name{
+  margin:0;
+  font-size:40px;      /* big like sample */
+  font-weight:800;
+  letter-spacing:.5px;
+  color:#fff;
+}
+.role{
+  margin:.35rem 0 0;
+  font-size:24px;
+  font-weight:400;
+  color:#f0e9ea;
+}
+
+/* Body */
+.resume-body{
+  display:flex;
+  gap:36px;
+  padding:36px 40px 40px;
+}
+
+/* Columns */
+.left-col{
+  flex:0 0 34%;
+  padding-right:24px;
+  border-right:2px solid var(--rule);
+}
+.right-col{
+  flex:1;
+  padding-left:8px;
+}
+
+/* Sections */
+.section{margin-bottom:28px}
+.section-title{
+  font-size:22px;            /* slightly bigger, like sample */
+  font-weight:700;
+  color:var(--maroon);
+  margin:0 0 12px;
+  position:relative;
+}
+.section-title::after{
+  content:"";
+  display:block;
+  width:120px;
+  height:3px;
+  background:var(--maroon);
+  margin-top:8px;
+}
+.section-title.right{ margin-top:4px; } /* subtle alignment */
+
+/* Lists / text */
+.list{margin:0;padding-left:18px}
+.list li{margin:.25rem 0; line-height:1.5}
+.section p{margin:.35rem 0; line-height:1.7}
+
+/* Experience blocks */
+.exp-block{margin-bottom:18px}
+.exp-head{
+  font-weight:600;
+  margin-bottom:6px;
+}
+.exp-dates{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+/* Achievements */
+.achievements{
+  margin:0;
+  padding-left:18px;
+}
+.achievements li{
+  margin:.4rem 0;
+  line-height:1.6;
+}
+.section p {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.section p .icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  stroke: #333;
+  margin-top: 2px; /* keeps it visually aligned for multi-line text */
+}
+
+/* ✅ Top control bar (fully clickable) */
+#top-controls {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: auto; /* ✅ make it fully interactive */
+}
+
+/* Buttons */
+.control-btn {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.control-btn:hover {
+  background: rgba(0,0,0,0.05);
+  transform: translateY(-1px);
+}
+
+/* Dropdown group */
+#top-controls .download-group {
+  position: relative;
+  margin-left: auto;
+}
+
+/* Dropdown menu */
+.download-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  min-width: 160px;
+  z-index: 10000; /* ✅ keep on top */
+}
+
+/* Show when active */
+.download-menu.show {
+  display: block;
+}
+
+/* Menu options */
+.download-option {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.download-option:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* Body padding so controls don't overlap */
+body {
+  padding-top: 60px;
+}

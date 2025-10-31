@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Template</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/select_template.css') }}">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+      <li><a href="#">Sign Up</a></li>
+      <li><a href="#">Help</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Template Area -->
+  <div class="template-area">
+
+    <!-- 🧩 PART 1: Normal Templates -->
+    <h1>Select Your Resume Template</h1>
+    <div class="template-grid standard-grid">
+      {% for i in range(1, 5) %}
+      <div class="template-box">
+        <img src="{{ url_for('static', filename='images/template' ~ i ~ '.jpg') }}" alt="Template {{ i }}">
+        <button class="select-btn" data-template-id="{{ i }}">Select</button>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Space Between Sections -->
+    <div class="section-divider"></div>
+
+    <!-- 🧩 PART 2: New/Wide Template -->
+    <h1 class="wide-title">New Templates / Wider Templates</h1>
+
+    <div class="template-grid wide-grid">
+      <div class="template-box wide-box">
+        <img src="{{ url_for('static', filename='images/template6.jpg') }}" alt="Wide Template 6">
+        <button class="select-btn" data-template-id="6">Select</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup -->
+<div id="template-popup" class="popup">
+  <div class="popup-content">
+    <div class="popup-left">
+      <img id="popup-image" src="" alt="Template Preview">
+    </div>
+    <div class="popup-right">
+      <h2 id="popup-title">Resume Fields</h2>
+      <ul id="popup-fields"></ul>
+      <button class="final-select-btn">Select</button>
+    </div>
+  </div>
+</div>
+
+
+  <script src="{{ url_for('static', filename='js/select_template.js') }}"></script>
+  <!-- Footer Section -->
+
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+/* Template 5 - combined styles for form and preview */
+:root{
+  --teal: #5f9b99;
+  --peach: #e9cfc6;
+  --muted: #6b6b6b;
+  --accent: #3f7f7d;
+  --paper: #ffffff;
+  --font: "Poppins", sans-serif;
+}
+
+*{box-sizing:border-box}
+body{
+  font-family:var(--font);
+  background:#f4f6f8;
+  margin:0;
+  padding:40px 20px;
+  color:#222;
+}
+
+/* ---- Form ---- */
+.cv-form{
+  max-width:820px;
+  margin:0 auto;
+  background:var(--paper);
+  padding:28px;
+  border-radius:10px;
+  box-shadow:0 6px 22px rgba(0,0,0,0.06);
+}
+.cv-form h2{margin:0 0 18px 0;font-weight:700}
+.cv-form h3{margin:18px 0 8px 0;font-size:16px;color:var(--accent)}
+.row{display:flex;flex-direction:column;margin-bottom:12px}
+.row label{font-weight:600;margin-bottom:6px}
+.row input[type="text"], .row input[type="email"], .row textarea{
+  padding:10px;border:1px solid #ddd;border-radius:6px;font-size:15px;width:100%;
+}
+.row input[type="file"]{padding:6px 2px}
+.submit-row{display:flex;justify-content:flex-end;margin-top:18px}
+.submit-row button{background:var(--accent);color:#fff;padding:10px 18px;border:none;border-radius:8px;font-weight:600;cursor:pointer}
+.entry-container{border:1px solid #e6e9ec;padding:10px;border-radius:6px;background:#fbfcfd;margin-bottom:10px}
+.entry-actions{margin-top:8px}
+.entry-actions button{background:#fff;border:1px solid #ddd;padding:6px 10px;border-radius:6px;cursor:pointer}
+.mini-remove{background:#fff;border:0;color:#d33;font-weight:700;font-size:16px;margin-left:8px;cursor:pointer}
+
+/* skills chips in form */
+.skills-container{position:relative;border:1px solid #e0e4e8;padding:8px;border-radius:6px}
+#skills-list,#language-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.skill-chip{background:#eef2f2;padding:6px 10px;border-radius:20px;display:flex;align-items:center}
+.skill-chip span{margin-left:8px;cursor:pointer;font-weight:700}
+
+/* suggestions */
+.suggestion-box{list-style:none;margin:0;padding:0;border:1px solid #ddd;position:absolute;background:#fff;width:100%;z-index:20;max-height:160px;overflow:auto;display:none}
+.suggestion-box li{padding:8px;cursor:pointer}
+.suggestion-box li:hover{background:#f3f6f6}
+
+/* ---- Preview (resume) ---- */
+.resume-shell{max-width:950px;margin:0 auto;background:var(--paper);display:flex;box-shadow:0 6px 30px rgba(0,0,0,0.06);border-radius:6px;overflow:hidden}
+.left-column{
+  width: 34%;
+  background: var(--teal);   /* keep full teal from the top */
+  color: #fff;/* top padding = how far the inner content should sit down inside the teal */
+  padding: 90px 26px 36px 26px; /* top right bottom left — tweak the top (90px) as needed */
+  position: relative;/* make sure no margin-top exists here (delete any margin-top on .left-column) */
+  font-size: 15px; /* overall text size slightly bigger */
+  line-height: 1.5;
+}
+.right-column{width:66%;padding:26px;background:#fff}
+
+/* photo */
+.photo-wrap{
+  display:flex;
+  justify-content:center;
+  margin-top: -50px;   /* keeps the photo pulled up; change to -40px or -60px to fine-tune */
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 2;
+}
+/* keep image style as before */
+.photo-wrap img, .photo-placeholder{
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  border:8px solid #fff;
+  object-fit:cover;
+  background:#f3f3f3;
+  box-shadow:0 4px 14px rgba(0,0,0,0.12);
+}
+.photo-placeholder{display:block}
+
+/* left content */
+.left-column .section-title{
+  font-size:16px;
+  letter-spacing:1px;
+  margin-top:12px;
+  margin-bottom:8px;
+  font-weight:700
+}
+.education-list{list-style:none;padding:0;margin:0 0 18px 0;color:#f1f5f4}
+.education-list li{margin-bottom:10px;font-size:15px;line-height:1.35;color:#f6fbfb}
+.contact-block div{margin-bottom:10px;font-size:14px;color:#f1f5f4}
+.contact-block i {
+  margin-right: 8px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 900;
+  width: 20px;
+  text-align: center;
+  display: inline-block; /* add this */
+}
+.contact-block div {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px; /* small space between icon and text */
+  font-size: 15px;
+  color: #f1f5f4;
+  word-break: break-word; /* ensures long words wrap properly */
+  line-height: 1.4;
+}
+
+.contact-block i {
+  flex-shrink: 0; /* prevents icon from shrinking */
+  margin-top: 2px; /* keeps icon vertically aligned with first line */
+}
+
+
+
+
+/* right header */
+.header-area{background:var(--peach);padding:28px;border-radius:4px;margin-bottom:18px}
+.name{font-size:36px;margin:0;letter-spacing:1px;font-weight:700;color:#222}
+.title{margin:6px 0 0 0;font-style:italic;color:var(--muted)}
+
+/* content blocks */
+.content-block{margin-bottom:18px;padding:8px 0;border-bottom:1px dashed #eee}
+.block-title{font-weight:700;margin:0 0 8px 0;display:flex;align-items:center}
+.block-title:before{content:"";display:inline-block;width:18px;height:18px;margin-right:10px;background:var(--teal);clip-path:polygon(0 50%, 65% 0, 65% 100%);}
+
+.profile-text{line-height:1.6;color:#333}
+.simple-list{list-style:none;padding:0;margin:0}
+.simple-list li{padding:6px 0;color:#444}
+.skill-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#f1f4f4;padding:6px 10px;border-radius:20px;font-weight:600;color:#333}
+.cert-list{list-style:none;padding:0;margin:0}
+.cert-list li{margin-bottom:10px}
+
+/* small devices */
+@media (max-width:880px){
+  .resume-shell{flex-direction:column}
+  .left-column,.right-column{width:100%}
+  .photo-wrap img{width:120px;height:120px}
+  .header-area{padding:18px}
+  .name{font-size:28px}
+  body{padding:20px}
+}
+/* Shift left column downward slightly */
+/* fine-tune spacing for education and contact sections */
+.education-section {
+  margin-top: 50px !important;  /* moves the entire Education section a bit lower */
+}
+
+.contact-section {
+  margin-top: 60px !important;  /* moves full contact section (title + details) */
+}
+/* Adds small space between section title and data */
+.education-section .section-title,
+.contact-section .section-title {
+  margin-bottom: 20px; /* you can make it 8px or 10px if you want slightly more gap */
+}
+h3 + .entry-container, h3 + .skills-container, h3 + label {
+    margin-top: 15px; /* adds space below the H3 heading */
+}
+#certs-container {
+    margin-top: 20px;
+}
+
+/* Top control bar */
+#top-controls {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  
+  display: flex;
+  justify-content: space-between;
+  z-index: 9999;
+}
+
+/* Buttons */
+.control-btn {
+  pointer-events: auto; /* re-enable interaction for buttons */
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  cursor: pointer;
+}
+
+/* Place back on left, download on right */
+#top-controls .download-group {
+  margin-left: auto;
+  display: inline-block;
+  position: relative;
+}
+
+/* Dropdown menu hidden by default */
+.download-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  min-width: 160px;
+}
+
+/* Show menu when active */
+.download-menu.show { display: block; }
+
+/* Options */
+.download-option {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+.download-option:hover { background: rgba(0,0,0,0.03); }
+
+/* Make sure resume still scrollable under controls */
+body { padding-top: 60px; } /* optional, only if top-controls overlaps content */
+
+
